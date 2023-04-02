@@ -2,7 +2,7 @@
   "name": "kazi-skillset-client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:3000",
+  "proxy": "https://kazi-skill-set-server.herokuapp.com",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
