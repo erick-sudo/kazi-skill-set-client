@@ -71,7 +71,7 @@ function SignUpForm(){
                             <div className="flex flex-col">
                                 <label className="text-sm font-bold py-1"><span className="text-red-500 font-bold mr-2">*</span>Create a username:</label>
                                 <input type="text" className="shadow-md py-1 px-3" name="username"/>
-                                {errors.username ?  <Errors errs={errors.lastname} /> : null}
+                                {errors.username ?  <Errors errs={errors.username} /> : null}
                             </div>
                         </div>
 

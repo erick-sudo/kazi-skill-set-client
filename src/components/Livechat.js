@@ -21,7 +21,7 @@ function Livechat({hideLivechat}) {
 
     useEffect(() => {
         if(user) {
-            fetch(`/${user.job_profile ? "professionals" : "clients" }/${user.id}/chats`,{
+            fetch(`/${user.job_title ? "professionals" : "clients" }/${user.id}/chats`,{
                 method: "GET",
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('jwt')}`
@@ -32,7 +32,6 @@ function Livechat({hideLivechat}) {
                     
                 } else {
                     response.json().then(msgs => {
-                        console.log(msgs)
                         setMessages(msgs)
                         setCurrentChat(msgs.length > 0 ? 0 : null)
                     })
@@ -55,7 +54,7 @@ function Livechat({hideLivechat}) {
                 <div id="people" className="w-24">
                     <div className="absolute text-[2.5em] p-2 bottom-2 right-3 border rounded-full bg-black cursor-pointer hover:bg-green-700 z-50"><TbMessagePlus className="text-sky-600" /></div>
                     {
-                        messages.map((chat, index) => <Chat key={index} idx={index} setCurrentChat={setCurrentChat} />)
+                        messages.map((chat, index) => <Chat key={index} idx={index} curr={currentChat} setCurrentChat={setCurrentChat} />)
                     }
                 </div>
                 <div id="messages" className="relative grow">
@@ -78,12 +77,13 @@ function Livechat({hideLivechat}) {
                             client_id: sessionStorage.getItem('who')==='client' ? user.id : messages[currentChat].id,
                             professional_id: sessionStorage.getItem('who')==='client' ? messages[currentChat].id : user.id,
                             content: msg.current.value,
-                            owner: 1
+                            owner: sessionStorage.getItem('who') === 'client' ? 0 : 1
                         })
                     })
                     .then(response => response.json())
                     .then(data => {
                         setChats([...chats, data])
+                        msg.current.value = ""
                     })
                 }} className="border-none text-xl px-4 bg-sky-700 rounded-rt-md hover:text-white hover:bg-green-500" ><MdSend /></button>
             </div>
@@ -155,10 +155,10 @@ function CurrentChat({r_id, usr, resetChats}) {
     )
 } 
 
-function Chat({image, idx, setCurrentChat}) {
+function Chat({image, idx, curr, setCurrentChat}) {
 
     return (
-        <div onClick={() => setCurrentChat(idx)} className="hover:ring-sky-400 hover:ring-4 ml-3 mt-3 mr-3 border rounded-full ring-2 ring-green-600">
+        <div onClick={() => setCurrentChat(idx)} className={`hover:ring-sky-400 hover:ring-4 ml-3 mt-3 mr-3 border rounded-full ring-2 ${curr === idx ? "ring-sky-600 ring-4" : "ring-green-100"}`}>
             <img className="rounded-full border-none block" src="https://www.pngitem.com/userimgs/364.jpg" alt="Dp" />
         </div>
     )

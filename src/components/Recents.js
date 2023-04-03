@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 import { UserContext } from './UserContext';
+import { SiWebmoney } from 'react-icons/si'
+import { RiAccountPinCircleFill } from 'react-icons/ri'
 
 const Recents = () => {
 
@@ -46,17 +48,20 @@ const Recents = () => {
                 <div className="header">
                 </div>
                 <div className="meta text-wrap">
-                <div className='prof-details flex items-center'>
-                  <i className="user circle icon" style={{ fontSize: "25px" }} />
+                <div className='prof-details flex items-center flex-col'>
+                  <RiAccountPinCircleFill />
                   <p className='text-sm'>{`${prof.firstname} ${prof.lastname}`}</p>
+                  <p>{prof.job_title}</p>
                 </div>
                 <p className='text-left text-black' >{prof.description.slice(0,75)+"..."}</p>
                 </div>
               </div>
               <div className="extra content">
-                <span>
-                  <a href={prof.portfoliourl}>Bio</a>
-                </span>
+                <span className='text-sky-700'>Portfolio</span>
+                <div className='flex items-center gap-3 text-sky-500 cursor-pointer'>
+                  <SiWebmoney />
+                  <a href={prof.portfoliourl}>{prof.portfoliourl}</a>
+                </div>
               </div>
             </div>
             )

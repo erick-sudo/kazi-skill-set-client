@@ -7,7 +7,7 @@ import Recents from "./Recents";
 import Navbar from "./Navbar";
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm";
-import Tasks from "./Tasks";
+import { Tasks } from "./Tasks";
 import Home from "./Home";
 import { ViewProfessional, ProfessionalProfile } from "./ViewProfessional";
 import { BsFillChatTextFill } from "react-icons/bs"

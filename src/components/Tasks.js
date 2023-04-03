@@ -45,21 +45,36 @@ function Tasks() {
             </div>
 
             <div className='grid sm-grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-                {tasks.slice(0,8).map((task) => (
-                <div className="max-w-lg shadow shadow-black m-3 p-4 bg-sky-100" key={task.id}>
-                    <h2>{task.location}</h2>
-                    <p className="card-text">{task.description}</p>
-                    <p className="card-text">{task.start_date}</p>
-                    <div className='flex p-3 font-bold gap-4'>
-                        <button className='text-white bg-green-500 px-3 py-2 rounded-md'>Accept</button>
-                        <button className='text-white bg-green-700 px-3 py-2 rounded-md'>Decline</button>
-                    </div>
-                </div>
-                ))}
+                {tasks.slice(0,8).map((task, index) => {
+                  return <Task task={task} key={index} />
+                })}
             </div>
             
         </div>
     )
 }
 
-export default Tasks;
+function Task({task, cart, p_id, igniteReload, clearPendingTask}) {
+
+  const user = useContext(UserContext)
+
+  return (
+      <div className="min-w-[400px] max-w-lg shadow shadow-black m-3 p-4 bg-sky-100 rounded-md bg-gradient-to-tr from-sky-100 to-white">
+        <h2>{task.location}</h2>
+          <p className="card-text">{task.description}</p>
+          <p className="card-text">{task.start_date}</p>
+          <div className='flex p-3 font-bold gap-4'>
+          { cart ? <><button onClick={() => {
+            user.signContract(user.user.id, task.client_id, task.id, p_id, igniteReload)
+          }} className='text-white bg-green-700 px-3 py-2 rounded-md'>Sign Contract</button><button onClick={() => {
+            user.declineTask(p_id)
+            clearPendingTask(p_id)
+          }} className='text-white bg-red-500 px-3 py-2 rounded-md'>Decline</button></> : <button onClick={() => {
+              user.takeTask(task.id, user.user.id)
+          }} className='text-white bg-green-500 px-3 py-2 rounded-md hover:bg-sky-500'>Add</button> }
+        </div>
+      </div>
+  )
+}
+
+export { Task, Tasks }

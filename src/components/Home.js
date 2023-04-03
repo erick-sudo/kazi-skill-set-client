@@ -4,13 +4,17 @@ import Loading from './Loading';
 
 import { UserContext } from './UserContext';
 
+import { BsHddNetworkFill } from 'react-icons/bs'
+import { RiWhatsappFill } from 'react-icons/ri'
+import { MdEmail, MdLocationPin } from 'react-icons/md'
+
 function Home (){
 
     const user = useContext(UserContext)
 
     const navigate = useNavigate();
 
-    const [searchTerm, setSearchTerm] = useState('h')
+    const [searchTerm, setSearchTerm] = useState('')
     const [professionals, setProfessionals] = useState([])
     const [selectedCategory, setSelectedCategory] = useState("Health")
     const [searchResults, setSearchResults] = useState([]);
@@ -103,17 +107,26 @@ function Home (){
                             <div className="header">
                         </div>
                         <div className="meta text-wrap">
+                            <div className='text-black flex gap-4 bg-sky-400 items-center py-2 px-3 font-bold shadow' ><BsHddNetworkFill /> {professional.job_title}</div>
                             <div className='prof-details'>
-                                <i className="user circle icon" style={{ fontSize: "25px" }} />
-                                <h3>Name</h3>
+                                <h3>{`${professional.firstname} ${professional.lastname}`}</h3>
                             </div>
-                            <p style={{ marginTop: "25px" }}>Description</p>
+                            <p style={{ marginTop: "25px" }}>{professional.description.slice(0,75)}...</p>
+                        </div>
+                        <div className='flex items-center gap-3 text-sky-500'>
+                            <MdEmail />
+                            <span>{professional.email}</span>
+                        </div>
+                        <div className='flex items-center gap-3 text-sky-500'>
+                            <RiWhatsappFill />
+                            <span>+{professional.phone}</span>
                         </div>
                     </div>
                         <div className="extra content">
-                            <span>
-                                <h4>Starting at KSH</h4>
-                            </span>
+                        <div className='flex items-center gap-3 text-sky-500'>
+                            <MdLocationPin />
+                            <span>+{professional.location}</span>
+                        </div>
                         </div>
                     </div>
                 ))}

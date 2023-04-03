@@ -9,6 +9,8 @@
 
 * {
   font-family: serif;
+  box-sizing: border-box;
+  
 }
 
 .signup-form input {

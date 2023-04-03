@@ -26,6 +26,73 @@ function UserProvider({children}) {
 
     },[])
 
+    function takeTask(task_id, prof_id ) {
+        fetch("/pending_tasks", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                task_id: task_id,
+                professional_id: prof_id
+            })
+        }).then(respose => {
+            if(respose.status < 400) {
+                respose.json().then(data => {
+                    navigate("/viewprofile/me")
+                })
+            }
+        })
+    }
+
+    function signContract(professional_id, client_id, task_id, pending_task_id, igniteReload) {
+        fetch(`/jobs`,{
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                task_id: task_id,
+                professional_id: professional_id,
+                client_id: client_id
+            })
+        }).then(response => {
+            if(response.status < 400 ) {
+                MySwal.fire({
+                    title: <p className='font-bold p-0 m-0 text-green-900'>Job Contract Signed</p>,
+                    icon: "success",
+                    iconColor: "green",
+                    background: "#87CEEB"
+                })
+                response.json().then(re => {
+                    igniteReload(re)
+                    declineTask(pending_task_id, 1)
+                })
+            }
+        })
+    }
+
+    function declineTask(pending_task_id, res) {
+        fetch(`/pending_tasks/${pending_task_id}`,{
+            method: 'DELETE'
+        })
+        .then(response => {
+            if(response.status < 400) {
+                if(res !== 1) {
+                    MySwal.fire({
+                        title: <p className='font-bold p-0 m-0 text-red-600'>Task Declined</p>,
+                        icon: "success",
+                        iconColor: "red"
+                    })
+                }
+
+                navigate("/viewprofile/me")
+            }
+        })
+    }
+
     function tryProfAuth() {
         fetch("/me_prof", {
             method: 'GET',
@@ -75,7 +142,7 @@ function UserProvider({children}) {
     function handleLogin(setErrors, e) {
         e.preventDefault()
 
-        fetch(`https://kazi-skill-set-server.herokuapp.com/${e.target.profacc.checked ? "login_p" : "login"}`,{
+        fetch(`/${e.target.profacc.checked ? "login_p" : "login"}`,{
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -193,6 +260,7 @@ function UserProvider({children}) {
        .then(response => {
         if(response.status === 422) {
             response.json().then(errors => {
+                
                 setErrors(errors.errors)
             })
         } else {
@@ -217,7 +285,7 @@ function UserProvider({children}) {
     }
 
     return (
-        <UserContext.Provider value={{user: user, setWho: setWho, who: who, setUser: setUser, logOut: logOut, handleLogin: handleLogin, handleSignup: handleSignup, handleProfUpdate: handleProfUpdate}} >
+        <UserContext.Provider value={{user: user, setWho: setWho, who: who, setUser: setUser, logOut: logOut, handleLogin: handleLogin, handleSignup: handleSignup, handleProfUpdate: handleProfUpdate, takeTask: takeTask, signContract: signContract, declineTask: declineTask }} >
             {children}
         </UserContext.Provider>
     )

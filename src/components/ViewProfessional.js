@@ -1,11 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { BsStarFill, BsStar } from "react-icons/bs"
 import { GoNoNewline } from "react-icons/go"
+import { RiWhatsappFill, RiAccountPinCircleFill } from 'react-icons/ri'
+import { MdEmail, MdPermIdentity } from 'react-icons/md'
 
 import Loading from "./Loading";
 import { UserContext } from "./UserContext";
+
+import { Task } from "./Tasks";
 
 function ViewProfessional() {
 
@@ -16,6 +20,7 @@ function ViewProfessional() {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
+
         fetch(`/${sessionStorage.getItem('who') === 'client' ? "clients_profs" : "professionals"}/${id}`, {
           method: 'GET',
           headers: {
@@ -29,8 +34,9 @@ function ViewProfessional() {
             setProf(data)
             setLoading(false)
         })
-    }, [])
 
+        
+    }, [])
     return (
     <>  { loading ? 
         <Loading /> :
@@ -42,10 +48,10 @@ function ViewProfessional() {
                 <div className="font-bold text-center py-2 w-3/4 mx-auto">{prof.location ? prof.location.toUpperCase() : null}</div>
             </div>
             <div className="">
-                <h2 className="text-sky-800">#{prof.username}</h2>
-                <h1>{prof.firstname} {prof.lastname}</h1>
-                <a href={`mailto:${prof.email}`}>{prof.email}</a>
-                <div><a href={`tel:${prof.phone}`}>{prof.phone}</a></div>
+                <h2 className="text-sky-800 flex items-center border-b border-black"><MdPermIdentity className="mr-2 text-[1.2em]" /> {prof.username}</h2>
+                <h1><RiAccountPinCircleFill /> {prof.firstname} {prof.lastname}</h1>
+                <div className="flex items-center"><MdEmail className="mr-2 text-[1.2em]" /><a href={`mailto:${prof.email}`}>{prof.email}</a></div>
+                <div className="flex items-center"><RiWhatsappFill className="mr-2 text-[1.2em]" /><a href={`tel:${prof.phone}`}>{prof.phone}</a></div>
                 <p className="text-sm">{prof.description}</p>
             </div>
         </div>
@@ -64,14 +70,26 @@ function ProfessionalProfile() {
 
 
     const [loading, setLoading] = useState(true)
+    const [pendingtasks, setPendingTasks] = useState([])
+
+    const [reloader, setReloader] = useState(0)
+
+    function igniteReload(newContract) {
+      alert("Ignition")
+      alert(Object.keys(newContract).join("\n"))
+      
+    }
 
     function handleChange(e) {
       setProf({...prof, [e.target.name]: e.target.value})
     }
 
-    
+    function clearPendingTask(p_id) {
+      setPendingTasks(pendingtasks.filter(t => t.id !== p_id))
+    }
 
     useEffect(() => {
+
         fetch(`/me_prof`, {
           method: 'GET',
           headers: {
@@ -84,8 +102,18 @@ function ProfessionalProfile() {
         .then(data => {
             setProf(data)
             setLoading(false)
+
+            fetchPendingTasks(data.id)
         })
-    }, [])
+    }, [reloader])
+
+    function fetchPendingTasks(profId) {
+      fetch(`/pendingtasks/${profId}`)
+      .then(response => response.json())
+      .then(data => {
+        setPendingTasks(data)
+      })
+    }
 
     return (
     <>  { loading ? 
@@ -142,6 +170,14 @@ function ProfessionalProfile() {
               <input className="bg-sky-800 py-2 px-4 rounded-md hover:bg-white hover:text-black font-bold" type="submit" value="Update Changes" />
             </div>
         </form>
+
+        <div className="flex overflow-x-scroll">
+        {
+          pendingtasks.map((p_task, index) => {
+            return <Task key={index} task={p_task.task} cart="true" p_id={p_task.id} igniteReload={igniteReload} clearPendingTask={clearPendingTask} />
+          })
+        }
+        </div>
         <Reviews id={prof.id} who="prof" /> </> : null }
         </>
         }
@@ -150,6 +186,8 @@ function ProfessionalProfile() {
 }
 
 function Reviews({id, who}) {
+
+    const reviewers = useRef()
 
     const [reviews, setReviews]  = useState([])
     const [selectedJob, setSelectedJob] = useState(0)
@@ -184,11 +222,11 @@ function Reviews({id, who}) {
                 <div className="jobs grid grid-cols-1 items-start">
                   {
                     reviews.map((job, index) => {
-                      return <JobReviewCard job={job} key={index} jobNumber={index} setSelectedJob={setSelectedJob} deleteJob={deleteJob} />
+                      return <JobReviewCard reviewers={reviewers} job={job} who={who} key={index} jobNumber={index} setSelectedJob={setSelectedJob} deleteJob={deleteJob} selectedJob={selectedJob} />
                     })
                   }
                 </div>
-                <div className="reviews" >
+                <div className="reviews" ref={reviewers} >
                   <h2 className="pl-4">Reviewers</h2>
                     { reviews[selectedJob] ?
                       reviews[selectedJob].reviews.length > 0 ?
@@ -204,19 +242,27 @@ function Reviews({id, who}) {
     )
 }
 
-function JobReviewCard({job, jobNumber, setSelectedJob, deleteJob}) {
+function JobReviewCard({job, reviewers, jobNumber, setSelectedJob, who, deleteJob, selectedJob}) {
+
   return (
-    <div className="relative p-3 my-3 bg-slate-50 rounded-md">
-      <button onClick={() => deleteJob(job.id)} className="bg-red-600 px-3 py-1 absolute right-2 rounded-md text-white">Remove</button>
+    <div className={`${jobNumber===selectedJob ? "ring-8 ring-black" : ""}  relative p-3 my-3 bg-slate-50 rounded-md bg-gradient-to-bl from-sky-100 via-white hover:ring-2`}>
+      { who && <button onClick={() => deleteJob(job.id)} className="bg-red-600 px-3 py-1 absolute right-2 rounded-md text-white">Remove</button> }
       <div className="border-sky-400 border-b-4">
         <img className="" src="https://cdn.pixabay.com/photo/2013/07/13/01/10/plumbing-155224__340.png" />
       </div>
       <div>
         <p className="">Client: <span className="font-bold text-sky-800">{`${job.client.firstname} ${job.client.lastname}`}</span></p>
-        <p className="text-sm">Email: <span className="text-sky-400">{job.client.email}</span></p>
+        <p className="text-sm">Client's Email Address: <span className="text-sky-400">{job.client.email}</span></p>
+      </div>
+      <div className="bg-gradient-to-r from-sky-200 py-1 px-2 rounded-md">
+        <h3>Job Description</h3>
+        <p>{job.task.description}</p>
       </div>
       <div className="flex justify-end py-2">
-        <button onClick={() => setSelectedJob(jobNumber)} className="bg-sky-400 py-2 px-3 rounded-md hover:bg-sky-900 hover:text-white">See Reviews</button>
+        <button onClick={() => {
+          setSelectedJob(jobNumber)
+          reviewers.current.scrollIntoView({behavior: "smooth", inline: 'start'})
+        }} className="bg-sky-400 py-2 px-3 rounded-md hover:bg-sky-900 hover:text-white">See Reviews</button>
       </div>
     </div>
   )
