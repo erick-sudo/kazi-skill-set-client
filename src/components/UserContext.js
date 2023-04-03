@@ -75,7 +75,7 @@ function UserProvider({children}) {
     function handleLogin(setErrors, e) {
         e.preventDefault()
 
-        fetch(`/${e.target.profacc.checked ? "login_p" : "login"}`,{
+        fetch(`https://kazi-skill-set-server.herokuapp.com/${e.target.profacc.checked ? "login_p" : "login"}`,{
         method: "POST",
         headers: {
             "Content-Type": "application/json",
