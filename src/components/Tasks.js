@@ -44,7 +44,7 @@ function Tasks() {
               <button className="button bg-blue-400 px-4 py-2 rounded-md">Search</button>
             </div>
 
-            <div className='grid sm-grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+            <div className='flex flex-wrap'>
                 {tasks.slice(0,8).map((task, index) => {
                   return <Task task={task} key={index} />
                 })}

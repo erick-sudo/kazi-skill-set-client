@@ -14,6 +14,8 @@ import { BsFillChatTextFill } from "react-icons/bs"
 import Livechat from "./Livechat";
 import { UserContext } from "./UserContext";
 
+import Footer from "./Footer";
+
 const App = () => {
 
   const [chat, setChat] = useState(false)
@@ -26,15 +28,18 @@ const App = () => {
       
       { (chat && user.user) ? <Livechat hideLivechat={setChat} /> : null }
       { chat ? null :  user.user ? <div className="fixed right-4 bottom-2 z-50 text-[3em] text-sky-700 ring bg-sky-300 rounded-full p-3 hover:bg-sky-600 hover:text-white" onClick={() => setChat(true)}><BsFillChatTextFill /></div> : null }
-      <Routes>
-        <Route path="/" element={<><Landing /><Recents /></>} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/tasks" element={<Tasks />} />
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/prof/:id" element={<ViewProfessional />} />
-        <Route path="/viewprofile/me" element={<ProfessionalProfile />} />
-        <Route path="/signup" element={<SignUpForm />} />
-      </Routes>
+      <div className="routing">
+        <Routes>
+          <Route path="/" element={<><Landing /><Recents /></>} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/tasks" element={<Tasks />} />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/prof/:id" element={<ViewProfessional />} />
+          <Route path="/viewprofile/me" element={<ProfessionalProfile />} />
+          <Route path="/signup" element={<SignUpForm />} />
+        </Routes>
+      </div>
+      <Footer />
     </div>
   );
 }

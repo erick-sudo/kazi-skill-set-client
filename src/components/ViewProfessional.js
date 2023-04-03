@@ -129,7 +129,11 @@ function ProfessionalProfile() {
                   <label>Change Job Title</label>
                   <input type="text" className="p-2 outline-none" onChange={handleChange} name="job_title"  value={prof.job_title} />
                 </div>
-                <img className="border" src={prof.poster} alt="Avatar" />
+                <div className="flex flex-col max-w-lg mb-2">
+                  <label>Avatar</label>
+                  <input type="text" className="p-2 outline-none" onChange={handleChange} name="poster"  value={prof.poster} />
+                </div>
+                <img className="my-2" src={prof.poster} alt="Avatar" />
                 <div className="flex flex-col max-w-lg">
                   <label>Change Portfoliourl</label>
                   <input type="url" className="p-2 outline-none" onChange={handleChange} name="portfoliourl"  value={prof.portfoliourl} />
