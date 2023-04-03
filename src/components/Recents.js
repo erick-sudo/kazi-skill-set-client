@@ -15,7 +15,7 @@ const Recents = () => {
 
   useEffect(() => {
     const getProfs = async () => {
-      const response = await fetch(`/${sessionStorage.getItem('who') === 'professional' ? 'search' : "topprofs" }`, {
+      const response = await fetch(`https://kazi-skill-set-server.herokuapp.com/${sessionStorage.getItem('who') === 'professional' ? 'search' : "topprofs" }`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${sessionStorage.getItem('jwt')}`

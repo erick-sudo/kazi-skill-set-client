@@ -22,7 +22,7 @@ function Home (){
     useEffect(() =>{
 
         if(user.user) {
-            fetch(`/professionals?category=${selectedCategory}`, {
+            fetch(`https://kazi-skill-set-server.herokuapp.com/professionals?category=${selectedCategory}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + sessionStorage.getItem('jwt')
@@ -42,7 +42,7 @@ function Home (){
             e.preventDefault();
             if (searchTerm.length > 0) {
         // handle search of professionals
-                let url = '/search';
+                let url = 'https://kazi-skill-set-server.herokuapp.com/search';
                 let searchKey = searchTerm
                 url += `?q=${searchKey}`;
                 fetch(url)

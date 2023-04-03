@@ -13,7 +13,7 @@ function Tasks() {
     
     // Fetch data using the user Id
     if(user.user) {
-      fetch(`/tasks`,{
+      fetch(`https://kazi-skill-set-server.herokuapp.com/tasks`,{
           method: 'GET',
           headers: {
             'Authorization': 'Bearer ' + sessionStorage.getItem('jwt')

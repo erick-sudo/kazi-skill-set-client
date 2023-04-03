@@ -27,7 +27,7 @@ function UserProvider({children}) {
     },[])
 
     function takeTask(task_id, prof_id ) {
-        fetch("/pending_tasks", {
+        fetch("https://kazi-skill-set-server.herokuapp.com/pending_tasks", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -47,7 +47,7 @@ function UserProvider({children}) {
     }
 
     function signContract(professional_id, client_id, task_id, pending_task_id, igniteReload) {
-        fetch(`/jobs`,{
+        fetch(`https://kazi-skill-set-server.herokuapp.com/jobs`,{
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
@@ -75,7 +75,7 @@ function UserProvider({children}) {
     }
 
     function declineTask(pending_task_id, res) {
-        fetch(`/pending_tasks/${pending_task_id}`,{
+        fetch(`https://kazi-skill-set-server.herokuapp.com/pending_tasks/${pending_task_id}`,{
             method: 'DELETE'
         })
         .then(response => {
@@ -94,7 +94,7 @@ function UserProvider({children}) {
     }
 
     function tryProfAuth() {
-        fetch("/me_prof", {
+        fetch("https://kazi-skill-set-server.herokuapp.com/me_prof", {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + sessionStorage.getItem('jwt')
@@ -113,7 +113,7 @@ function UserProvider({children}) {
     }
 
     function tryClientAuth() {
-        fetch("/me_c", {
+        fetch("https://kazi-skill-set-server.herokuapp.com/me_c", {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + sessionStorage.getItem('jwt')
@@ -142,7 +142,7 @@ function UserProvider({children}) {
     function handleLogin(setErrors, e) {
         e.preventDefault()
 
-        fetch(`/${e.target.profacc.checked ? "login_p" : "login"}`,{
+        fetch(`https://kazi-skill-set-server.herokuapp.com/${e.target.profacc.checked ? "login_p" : "login"}`,{
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -181,7 +181,7 @@ function UserProvider({children}) {
     }
 
     function handleProfUpdate(setUpdatedProf, data) {
-        fetch(`/professionals/${data.id}`, {
+        fetch(`https://kazi-skill-set-server.herokuapp.com/professionals/${data.id}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
@@ -249,7 +249,7 @@ function UserProvider({children}) {
         "password_confirmation": e.target.password_confirmation.value
        }
 
-       fetch(`/${e.target.profacc.checked ? "signup_p" : "signup"}`,{
+       fetch(`https://kazi-skill-set-server.herokuapp.com/${e.target.profacc.checked ? "signup_p" : "signup"}`,{
         method: "POST",
         headers: {
             "Content-Type": "application/json",

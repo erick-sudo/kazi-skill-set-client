@@ -21,7 +21,7 @@ function ViewProfessional() {
 
     useEffect(() => {
 
-        fetch(`/${sessionStorage.getItem('who') === 'client' ? "clients_profs" : "professionals"}/${id}`, {
+        fetch(`https://kazi-skill-set-server.herokuapp.com/${sessionStorage.getItem('who') === 'client' ? "clients_profs" : "professionals"}/${id}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${sessionStorage.getItem('jwt')}`
@@ -90,7 +90,7 @@ function ProfessionalProfile() {
 
     useEffect(() => {
 
-        fetch(`/me_prof`, {
+        fetch(`https://kazi-skill-set-server.herokuapp.com/me_prof`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${sessionStorage.getItem('jwt')}`
@@ -108,7 +108,7 @@ function ProfessionalProfile() {
     }, [reloader])
 
     function fetchPendingTasks(profId) {
-      fetch(`/pendingtasks/${profId}`)
+      fetch(`https://kazi-skill-set-server.herokuapp.com/pendingtasks/${profId}`)
       .then(response => response.json())
       .then(data => {
         setPendingTasks(data)
@@ -194,7 +194,7 @@ function Reviews({id, who}) {
 
     function deleteJob(reviewId) {
       setReviews(reviews.filter(review => review.id !== reviewId))
-      fetch(`/jobs/${reviewId}`,{
+      fetch(`https://kazi-skill-set-server.herokuapp.com/jobs/${reviewId}`,{
         method: 'DELETE'
       })
       .then(response => response.json())
@@ -204,7 +204,7 @@ function Reviews({id, who}) {
     }
 
     useEffect(() => {
-        fetch(`/${sessionStorage.getItem('who') === 'client' ? 'clients' : 'professionals'}/${id}/reviews`, {
+        fetch(`https://kazi-skill-set-server.herokuapp.com/${sessionStorage.getItem('who') === 'client' ? 'clients' : 'professionals'}/${id}/reviews`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${sessionStorage.getItem('jwt')}`

@@ -21,7 +21,7 @@ function Livechat({hideLivechat}) {
 
     useEffect(() => {
         if(user) {
-            fetch(`/${user.job_title ? "professionals" : "clients" }/${user.id}/chats`,{
+            fetch(`https://kazi-skill-set-server.herokuapp.com/${user.job_title ? "professionals" : "clients" }/${user.id}/chats`,{
                 method: "GET",
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('jwt')}`
@@ -66,7 +66,7 @@ function Livechat({hideLivechat}) {
             <div className="flex rounded-b-xl border-t absolute h-12 right-0 left-0 bottom-0">
                 <textarea ref={msg} className="outline-none flex-grow px-3 py-2" type="text"></textarea>
                 <button onClick={(e) => {
-                    fetch(`/messages`, {
+                    fetch(`https://kazi-skill-set-server.herokuapp.com/messages`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -119,7 +119,7 @@ function CurrentChat({r_id, usr, resetChats}) {
     useEffect(() => {
         if(usr) {
             if(sessionStorage.getItem('who') === 'client') {
-                fetch(`/chats?c=${r_id}&p=${usr.id}`, {
+                fetch(`https://kazi-skill-set-server.herokuapp.com/chats?c=${r_id}&p=${usr.id}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('jwt')}`
@@ -131,7 +131,7 @@ function CurrentChat({r_id, usr, resetChats}) {
                 setL(data.length)
             })
             } else {
-                fetch(`/chats?c=${usr.id}&p=${r_id}`,{
+                fetch(`https://kazi-skill-set-server.herokuapp.com/chats?c=${usr.id}&p=${r_id}`,{
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('jwt')}`
